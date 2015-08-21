@@ -1,0 +1,32 @@
+<h1>Play Hangman</h1>
+<br>
+<form action = "/start" method="post">
+  <label for="game">Enter a name for game</label>
+  <input name="game" type="text"/>
+  <label for="target">Target</label>
+  <input name="target" type="text"/>
+  <input type="submit" value = "Start new Game"/>
+</form>
+<br>
+<br>
+<div ng-app="LiveGames" ng-controller="AppCtrl">
+  <h2>Ongoing games</h2>
+  <ul>
+    <li ng-repeat = "game in games">
+      <a href = "/games/join/{{game.name}}">{{game.name}}</a>
+    </li>
+  </ul>
+</div>
+<br>
+<a href="/logout">Logout</a>
+<script type="text/javascript">
+  angular.module('LiveGames', []).controller('AppCtrl', function($scope, $http) {
+    $scope.games = $scope.games || [];
+    
+    io.socket.get('/games/list', function (games) {
+      console.log(games);
+      $scope.games = games;
+      $scope.$apply();
+    });
+  });
+</script>

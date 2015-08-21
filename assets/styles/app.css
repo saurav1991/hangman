@@ -1,0 +1,33 @@
+body {
+	padding-top: 80px
+}
+
+#messages {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  position: relative;
+  bottom: 1px;
+  overflow: auto;
+}
+
+#chat {
+  position: relative;
+  overflow:   auto;
+}
+
+#users {
+  float: right;
+}
+
+#users ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#users li {
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid #eee;
+  padding: 5px 0;
+}

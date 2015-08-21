@@ -1,0 +1,92 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-collapse">
+        	<span class="sr-only">Toggle Nav</span>
+          	<span class="icon-bar"></span>
+          	<span class="icon-bar"></span>
+          	<span class="icon-bar"></span>
+        </button>
+        <p class="navbar-brand">Game <%= gameName %></p>
+    </div>
+    <div class="collapse navbar-collapse" id="nav-collapse">
+		<p class="navbar-right navbar-text">Admin , <strong><%= gameAdmin %></strong>
+		&nbsp;&nbsp<a href="/logout">Logout</a>
+	</div>
+</nav>
+<div class="container" ng-app="Game">
+	<div class="row" id="chat">
+	  <div id="messages" class="col-xs-10" ng-controller="MessageController">
+	  	<p ng-repeat="move in moves">
+	  		<span>{{move}}</span>
+	  	</p>
+	  </div>
+	  <div id="users" class="col-xs-2" ng-controller="PlayerController">
+	    <p class="lead">Users</p>
+	    <ul>
+	    	<li ng-repeat="player in players">
+	    		<span>{{player}}</span>
+	    	</li>
+	    </ul>
+	  </div>
+	</div>
+
+	<div class="row" ng-controller="MoveController">
+	  <div class="col-xs-11">
+	    <input id="new-message" class="form-control" type="text" ng-model="newMove" />
+	  </div>
+	  <div class="col-xs-1">
+	    <button class="btn btn-default" ng-click="sendMsg()">Send</button>
+	  </div>
+	</div>
+</div>
+<script type="text/javascript">
+	var game = angular.module('Game', []);
+	game.controller('PlayerController', function($scope, $http) {
+		console.log("INSIDE ANGULAR PLAYER CONTROLLER");
+		$scope.players = $scope.players || [];
+		io.socket.get('/games/join', function (players) {
+			console.log("Existing players ", players);
+			$scope.players = players;
+			$scope.$apply();
+		});
+		console.log("LISTENING FOR GAME EVENTS");
+		io.socket.on('game', function(obj) {
+			console.log('Listening!!');
+			console.log('EventData', obj);
+			if (obj.verb === 'addedTo') {	
+				$scope.players.push(obj.addedId);
+				$scope.$apply();
+			}
+		});
+	});
+
+	game.controller('MessageController', function($scope, $http) {
+		console.log("INSIDE ANGULAR MESSAGE CONTROLLER");
+		$scope.moves = $scope.moves || [];
+		io.socket.get('/moves/list', function (moves) {
+			console.log("Past moves", moves);
+			$scope.moves = moves;
+			$scope.$apply();
+		});
+		console.log('LISTENING FOR MOVE EVENTS');
+		io.socket.on('move', function(obj) {
+			console.log('GOT MOVE EVENT');
+			if (obj.verb === 'created') {
+				console.log('MOVE CREATED');
+				console.log(obj.data);
+				$scope.moves.push(obj.data.text);
+				console.log($scope.moves);
+				$scope.$apply();
+			}
+		});
+	});
+
+	game.controller('MoveController', function($scope, $http) {
+		console.log("INSIDE ANGULAR MOVE CONTROLLER");
+		$scope.sendMsg = function () {
+			console.log($scope.newMove);
+			io.socket.post('/moves/addMove', {move: $scope.newMove});
+			$scope.newMove = "";
+		}
+	});
+</script>
