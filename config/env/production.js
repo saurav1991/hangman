@@ -22,7 +22,7 @@ module.exports = {
      migrate: 'safe'
   },
 
-  session: {
+/*  session: {
     adapter: 'redis',
     host: 'cod.redistogo.com',
     port: 9875,
@@ -36,7 +36,7 @@ module.exports = {
     port: 9875,
     db: 'redistogo',
     pass: '386280d6ef596e12e8d9a1736b1ff0f6'
-  },
+  },*/
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
