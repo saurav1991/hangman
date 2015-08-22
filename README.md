@@ -1,3 +1,5 @@
+#hangman
+
 Classic game of hangman with Mad Max dialogues thrown in
 
 User can log in, create a game or play an ongoing game. Game creator can monitor the game or motivate / curse other players at free will.
