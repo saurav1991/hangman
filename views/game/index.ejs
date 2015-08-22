@@ -9,7 +9,7 @@
 </form>
 <br>
 <br>
-<div ng-app="LiveGames" ng-controller="AppCtrl">
+<div ng-app="LiveGames" ng-controller="GameController">
   <h2>Ongoing games</h2>
   <ul>
     <li ng-repeat = "game in games">
@@ -20,7 +20,7 @@
 <br>
 <a href="/logout">Logout</a>
 <script type="text/javascript">
-  angular.module('LiveGames', []).controller('AppCtrl', function($scope, $http) {
+  angular.module('LiveGames', []).controller('GameController', function($scope, $http) {
     $scope.games = $scope.games || [];
     
     io.socket.get('/games/list', function (games) {
@@ -28,5 +28,14 @@
       $scope.games = games;
       $scope.$apply();
     });
+
+    io.socket.on('game', function(obj) {
+      console.log('GOT GAME EVENT');
+      if (obj.verb === 'created') {
+        console.log(obj.data.game);
+        $scope.games.push(obj.data.game);
+        $scope.$apply();
+      }
+    })
   });
 </script>

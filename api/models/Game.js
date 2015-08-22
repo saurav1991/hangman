@@ -46,6 +46,7 @@ module.exports = {
   	startNewGame: function (gameData, callback) {
   		Game.create(gameData, function created (err, game) {
   			if (!err) {
+  				Game.publishCreate({id: game.id, game: {name: game.name}});
   				var welcomeText = 'Welcome to ' + game.name + ' Word length is ' + game.target.length;
   				game.moves.add({
   					text: welcomeText,
@@ -55,7 +56,11 @@ module.exports = {
   					if (err) {
   						return callback(err, null);
   					} else {
-  						return callback(null, game);
+  						Game.findOne(game.id).populate('admin').exec(function (err, game) {
+  							if (!err) {
+  								return callback(null, game);
+  							}
+  						});
   					}
   				});
   			} else {
@@ -70,6 +75,21 @@ module.exports = {
   				return callback(err, null);
   			}
   			game.players.add(data.playerId);
+  			game.save(function (err) {
+  				if (err) {
+  					return callback(err, null);
+  				}
+  				return callback(null, game);
+  			});
+  		});
+  	},
+
+  	removePlayer: function (data, callback) {
+  		Game.findOneByName(data.gameName).exec(function (err, game) {
+  			if (err) {
+  				return callback(err, null);
+  			}
+  			game.players.remove(data.playerId);
   			game.save(function (err) {
   				if (err) {
   					return callback(err, null);

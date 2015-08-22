@@ -29,7 +29,7 @@ module.exports = {
 			req.session.isGameAdmin = true;
 			return res.view('game/launch', {
 				gameName: game.name,
-				gameAdmin: game.admin
+				gameAdmin: game.admin.username
 			});
 		});
 	},
@@ -38,6 +38,7 @@ module.exports = {
 		if (!req.isSocket) {
 			return res.badRequest("Only socket requests accepted");
 		}
+		Game.watch(req);
 		Game.find({admin : {'!' : req.session.userId}}).exec(function (err, games) {
 			if (err) {
 				return res.negotiate(err)
@@ -90,6 +91,26 @@ module.exports = {
 					gameName: game.name,
 					gameAdmin: game.admin.username
 				})
+			});
+		});
+	},
+
+	leave: function (req, res) {
+		var userId = req.session.userId;
+		var gameName = req.session.gameName;
+		Game.removePlayer({
+			gameName: gameName,
+			playerId: userId
+		}, function (err, game) {
+			if (err) {
+				return res.negotiate(err);
+			}
+			User.findOne(userId).exec(function (err, user) {
+				if (err) {
+					return res.negotiate(err);
+				}
+				Game.publishRemove(game.id, 'players', user.username);
+				return res.view('game/index');
 			});
 		});
 	}

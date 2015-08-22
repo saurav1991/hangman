@@ -14,17 +14,19 @@ module.exports = {
 			if (err) {
 				return res.negotiate(err);
 			}
-			if (user.password !== req.param('password')) {
-				return res.forbidden();
-			}
-			user.loggedIn = true;
-			user.save(function (err) {
-				if (!err) {
-					req.session.authenticated = true;
-					req.session.userId = user.id;
-					return res.view('game/index');
+			if (user) {
+				if (user.password !== req.param('password')) {
+					return res.forbidden();
 				}
-			});
+				user.loggedIn = true;
+				user.save(function (err) {
+					if (!err) {
+						req.session.authenticated = true;
+						req.session.userId = user.id;
+						return res.view('game/index');
+					}
+				});
+			}
 		});
 	},
 	logout: function (req, res, next) {
