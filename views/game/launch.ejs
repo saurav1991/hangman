@@ -16,7 +16,7 @@
 <div class="container" ng-app="Game">
 	<div class="row" id="chat">
 	  <div id="messages" class="col-xs-10" ng-controller="MessageController">
-	  	<p ng-repeat="move in moves">
+	  	<p ng-repeat="move in moves track by $index">
 	  		<span>{{move}}</span>
 	  	</p>
 	  </div>
@@ -44,7 +44,7 @@
 	game.controller('PlayerController', function($scope, $http) {
 		console.log("INSIDE ANGULAR PLAYER CONTROLLER");
 		$scope.players = $scope.players || [];
-		io.socket.get('/games/join', function (players) {
+		io.socket.get('/games/player', function (players) {
 			console.log("Existing players ", players);
 			$scope.players = players;
 			$scope.$apply();

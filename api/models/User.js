@@ -9,10 +9,12 @@ module.exports = {
 	attributes: {
 		username: {
   			type: 'string',
-  			unique: true
+  			unique: true,
+        required: true
   		},
   		password: {
-  			type: 'string'
+  			type: 'string',
+        required: true
   		},
   		gameAdmin: {
   			collection: 'game',
@@ -20,6 +22,10 @@ module.exports = {
   		},
   		gameJoined: {
   			model: 'game'
-  		}
+  		},
+      loggedIn: {
+        type: 'boolean',
+        defaultsTo: false
+      }
   	}
 };

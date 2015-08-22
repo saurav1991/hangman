@@ -26,53 +26,28 @@ module.exports = {
 		console.log('GAME NAME', req.session.gameName, 'GAME ID', req.session.gameId);
 		console.log('user id', req.session.userId);
 		console.log('Fetching num guesses from session', req.session.remainingGuesses);
-		if (req.session.adminId) {
-			console.log('Admin saying something', req.session.adminId);
-			Move.create({
+		if (req.session.isGameAdmin) {
+			console.log('Admin saying something');
+			Move.createMove({
 				text: req.param('move'),
 				user: req.session.userId,
 				game: req.session.gameId
-			}).exec(function created (err, newMove) {
+			}, function (err, newMove) {
 				if (err) {
 					return res.negotiate(err);
 				}
-				Move.publishCreate({id: newMove.id, text: newMove.text});
-				console.log('Admin has been moved');
+				console.log('Admin has moved');
 			});
 		} else {
-
-			Move.create({
+			Move.processPlayerMove({
 				text: req.param('move'),
 				user: req.session.userId,
 				game: req.session.gameId
-			}).exec(function created (err, newMove) {
+			}, function (err, newMove) {
 				if (err) {
 					return res.negotiate(err);
 				}
-				Move.publishCreate({id: newMove.id, text: newMove.text});
-				console.log('A new move has been created');
-				console.log('Now processing move', newMove.text);
-				Game.findOne(req.session.gameId).exec(function (err, game) {
-					game.guesses = game.guesses - 1;
-					game.save(function (err) {
-						if (err) {
-							console.log('Could not update game moves');
-							return res.negotiate(err);
-						}
-						Move.create({
-							text: 'Moves remaining ' + game.guesses,
-							user: 9999,
-							game: req.session.gameId
-						}).exec(function created(err, systemMove) {
-							if (err) {
-								res.negotiate(err);
-							}
-							var systemMoveText = systemMove.text;
-							Move.publishCreate({id: systemMove.id, text: systemMoveText});
-							console.log('System  move generated', systemMove.id, systemMove.text);
-						});
-					});
-				});
+				console.log('Player move processed successfully');
 			});
 		}
 	}

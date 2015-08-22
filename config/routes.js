@@ -11,6 +11,7 @@ module.exports.routes = {
   'get /games/list': 'GameController.list',
   'get /games/join': 'GameController.join',
   'get /games/join/:game_name': 'GameController.join',
+  'get /games/player': 'GameController.listPlayers',
   'get /moves/list': 'MoveController.getPastMoves',
   'post /moves/addMove': 'MoveController.addMove'
 };
