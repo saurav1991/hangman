@@ -44,7 +44,7 @@ module.exports.sockets = {
   // -OR-
   //
 
-  //adapter: 'socket.io-redis',
+  adapter: 'socket.io-redis',
   //host: 'cod.redistogo.com',
   //port: 9875,
   //db: 'redistogo',
