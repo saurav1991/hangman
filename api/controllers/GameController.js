@@ -105,6 +105,8 @@ module.exports = {
 			if (err) {
 				return res.negotiate(err);
 			}
+			req.session.gameName = undefined;
+			req.session.gameId = undefined;
 			User.findOne(userId).exec(function (err, user) {
 				if (err) {
 					return res.negotiate(err);

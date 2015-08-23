@@ -31,13 +31,20 @@ module.exports = {
 	},
 	logout: function (req, res, next) {
 		req.session.authenticated = false;
-		var userId = req.session.userId;
-		User.update(userId, {
-			loggedIn: false
-		}).exec(function (err, users) {
-			if (!err) {
-				return res.view('homepage');
+
+		User.processLogout({
+			userId: req.session.userId,
+			gameId: req.session.gameId,
+			gameName: req.session.gameName,
+			isGameAdmin: req.session.isGameAdmin
+		}, function (err, user) {
+			req.session.userId = undefined;
+			req.session.gameId = undefined;
+			req.session.gameName = undefined;
+			if (err) {
+				return res.negotiate(err);
 			}
+			return res.view('homepage');
 		});
 	},
 	signup: function (req, res, next) {

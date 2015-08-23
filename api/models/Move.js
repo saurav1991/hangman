@@ -33,9 +33,9 @@ module.exports = {
   	processPlayerMove: function (moveData, callback) {
   		Move.create(moveData).exec(function created(err, newMove) {
   			if (err) {
-  				return callback(err, null);
+  				return callback(err);
   			}
-  			Move.publishCreate({id: newMove.id, text: newMove.text});
+  			Move.publishCreate({id: newMove.id, move: newMove});
 			console.log('A new move has been created');
 			console.log('Now processing move', newMove.text);
 
@@ -45,7 +45,7 @@ module.exports = {
 						console.log('Next move', result.moveData);
 						result.gameData.save(function (err) {
 							if (err) {
-								return callback(err, null)
+								return callback(err)
 							}
 							Move.create({
 								text: result.moveData,
@@ -53,15 +53,26 @@ module.exports = {
 								game: game.id
 							}).exec(function (err, systemMove) {
 								if (err) {
-									return callback(err, null);
+									return callback(err);
 								}
-								Move.publishCreate({id: systemMove.id, text: systemMove.text});
-								console.log('System move generated', systemMove.id, systemMove.text);
+								Move.publishCreate({id: systemMove.id, move: systemMove});
+								if (result.gameData.over) {
+									Game.destroy(result.gameData.id).exec(function (err) {
+										if (!err) {
+											console.log('GAME OVER, DESTROYING');
+											Game.publishDestroy(result.gameData.id);
+											return callback();
+										}
+									})
+								} else {
+									console.log('System move generated', systemMove.id, systemMove.text);
+									return callback();
+								}
 							});
 						});
 					});
 				} else {
-					return callback(err, null);
+					return callback(err);
 				}
 			});
   		});

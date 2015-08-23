@@ -13,11 +13,10 @@ module.exports = {
 			if (err) {
 				return res.negotiate(err);
 			}
-			console.log("WATCHING MOVES");
+			console.log("WATCHING GAME MOVES");
 			Move.watch(req);
-			var moveTexts = _.pluck(game.moves, 'text');
-			console.log("All moves", moveTexts);
-			return res.send(moveTexts);
+			//console.log("All moves", moveTexts);
+			return res.send(game.moves);
 		});
 	},
 
@@ -43,7 +42,7 @@ module.exports = {
 				text: req.param('move'),
 				user: req.session.userId,
 				game: req.session.gameId
-			}, function (err, newMove) {
+			}, function (err) {
 				if (err) {
 					return res.negotiate(err);
 				}

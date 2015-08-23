@@ -49,7 +49,7 @@
 </div>
 <script type="text/javascript">
 	var game = angular.module('Game', []);
-	game.controller('PlayerController', function($scope, $http) {
+	game.controller('PlayerController', function($scope, $http, $window, $location) {
 		console.log("INSIDE ANGULAR PLAYER CONTROLLER");
 		$scope.players = $scope.players || [];
 		io.socket.get('/games/player', function (players) {
@@ -70,15 +70,27 @@
 				$scope.players.splice(playerIndex, 1);
 				$scope.$apply();
 			}
+			if (obj.verb === 'destroyed') {
+				console.log('GAME DESTROYED');
+				$window.alert('This game is over. Redirecting to home');
+				$window.location.href = '/home';
+				//$scope.$apply();
+			}
 		});
 	});
 
 	game.controller('MessageController', function($scope, $http) {
 		console.log("INSIDE ANGULAR MESSAGE CONTROLLER");
+		var gameId;
 		$scope.moves = $scope.moves || [];
 		io.socket.get('/moves/list', function (moves) {
 			console.log("Past moves", moves);
-			$scope.moves = moves;
+			gameId = moves[0].game;
+			$scope.moves = moves.map(function (move) {
+				if (move) {
+					return move.text;
+				}
+			});
 			$scope.$apply();
 		});
 		console.log('LISTENING FOR MOVE EVENTS');
@@ -87,9 +99,11 @@
 			if (obj.verb === 'created') {
 				console.log('MOVE CREATED');
 				console.log(obj.data);
-				$scope.moves.push(obj.data.text);
-				console.log($scope.moves);
-				$scope.$apply();
+				if (obj.data.move.game === gameId) {
+					$scope.moves.push(obj.data.move.text);
+					console.log($scope.moves);
+					$scope.$apply();
+				}
 			}
 		});
 	});

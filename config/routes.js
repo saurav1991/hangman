@@ -1,6 +1,7 @@
 module.exports.routes = {
 
   '/': { view: 'homepage' },
+  '/home': {view: 'game/index'},
   'get /login': {view: 'user/login'},
   'get /signup': { view: 'user/signup' },
   'post /login': 'UserController.login',
