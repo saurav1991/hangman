@@ -18,23 +18,23 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-     connection: 'prodMongodbServer',
+     connection: 'localMongodbServer',
      migrate: 'safe'
   },
   session: {
     adapter: 'redis',
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    // ttl: <redis session TTL in seconds>,
-    db: process.env.REDIS_DB,
-    pass: process.env.REDIS_PASS
+    host: 'cod.redistogo.com',
+    port: 9875,
+    // ttl: <redis session TTL in second s>,
+    db: 'redistogo',
+    pass: '386280d6ef596e12e8d9a1736b1ff0f6'
   },
   sockets: {
     adapter: 'socket.io-redis',
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    db: process.env.REDIS_DB,
-    pass: process.env.REDIS_PASS,
+    host: 'cod.redistogo.com',
+    port: 9875,
+    db: 'redistogo',
+    pass: '386280d6ef596e12e8d9a1736b1ff0f6'
   },
 
   /***************************************************************************
