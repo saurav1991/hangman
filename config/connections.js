@@ -58,7 +58,7 @@ module.exports.connections = {
   ***************************************************************************/
   localMongodbServer: {
     adapter: 'sails-mongo',
-    url: 'mongodb://heroku_b0hbddgq:dv8ukinpqd8186qn6fiseae197@ds033153.mongolab.com:33153/heroku_b0hbddgq'
+    url: process.env.MONGOLAB_URI
     //host: 'localhost',
     //port: 27017,
     // user: 'username',
@@ -68,7 +68,7 @@ module.exports.connections = {
 
   prodMongodbServer: {
     adapter: 'sails-mongo',
-    url: 'mongodb://heroku_b0hbddgq:dv8ukinpqd8186qn6fiseae197@ds033153.mongolab.com:33153/heroku_b0hbddgq'
+    url: process.env.MONGOLAB_URI
     //host: 'localhost',
     //port: 27017,
     // user: 'username',
