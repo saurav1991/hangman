@@ -18,31 +18,30 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-     connection: 'localMongodbServer',
+     connection: 'prodMongodbServer',
      migrate: 'safe'
   },
-
-/*  session: {
+  session: {
     adapter: 'redis',
     host: 'cod.redistogo.com',
     port: 9875,
+    // ttl: <redis session TTL in seconds>,
     db: 'redistogo',
     pass: '386280d6ef596e12e8d9a1736b1ff0f6'
   },
-
   sockets: {
     adapter: 'socket.io-redis',
     host: 'cod.redistogo.com',
     port: 9875,
     db: 'redistogo',
-    pass: '386280d6ef596e12e8d9a1736b1ff0f6'
-  },*/
+    pass: '386280d6ef596e12e8d9a1736b1ff0f6',
+  }
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  port: 80,
+  //port: 80,
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
