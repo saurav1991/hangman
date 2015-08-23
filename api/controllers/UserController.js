@@ -41,6 +41,7 @@ module.exports = {
 			req.session.userId = undefined;
 			req.session.gameId = undefined;
 			req.session.gameName = undefined;
+			req.session.isGameAdmin = undefined;
 			if (err) {
 				return res.negotiate(err);
 			}

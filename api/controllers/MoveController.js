@@ -27,7 +27,7 @@ module.exports = {
 		console.log('Fetching num guesses from session', req.session.remainingGuesses);
 		if (req.session.isGameAdmin) {
 			console.log('Admin saying something');
-			Move.createMove({
+			Move.processAdminMove({
 				text: req.param('move'),
 				user: req.session.userId,
 				game: req.session.gameId

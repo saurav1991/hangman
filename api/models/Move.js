@@ -20,7 +20,7 @@ module.exports = {
 		}
   	},
 
-  	createMove: function (moveData, callback) {
+  	processAdminMove: function (moveData, callback) {
   		Move.create(moveData).exec(function (err, newMove) {
   			if (err) {
   				return callback(err, null);
