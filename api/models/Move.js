@@ -25,7 +25,7 @@ module.exports = {
   			if (err) {
   				return callback(err, null);
   			}
-  			Move.publishCreate({id: newMove.id, text: newMove.text});
+  			Move.publishCreate({id: newMove.id, move: newMove});
   			return callback(null, newMove);
   		});
   	},
