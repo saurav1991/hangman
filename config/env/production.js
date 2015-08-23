@@ -22,13 +22,12 @@ module.exports = {
      migrate: 'safe'
   },
   session: {
-    adapter: 'memory'
-    //adapter: 'redis',
-    //host: 'cod.redistogo.com',
-    //port: 9875,
+    adapter: 'redis',
+    host: 'cod.redistogo.com',
+    port: 9875,
     // ttl: <redis session TTL in seconds>,
-    //db: 'redistogo',
-    //pass: '386280d6ef596e12e8d9a1736b1ff0f6'
+    db: 'redistogo',
+    pass: '386280d6ef596e12e8d9a1736b1ff0f6'
   },
   sockets: {
     adapter: 'socket.io-redis',
